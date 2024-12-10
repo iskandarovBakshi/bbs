@@ -13,7 +13,10 @@ import {
 } from "@mui/material";
 import AddHomeIcon from "@mui/icons-material/AddHome";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AddBarberShops } from "./AddBarberShops";
+import { AddServices } from "./AddServices";
+import { useIsMounted } from "@/hooks/useIsMounted";
 
 const drawerWidth = 240;
 
@@ -24,6 +27,16 @@ enum BarberShops {
 
 export function AdminPanel() {
   const [activeMenu, setActiveMenu] = useState(BarberShops.barbershops);
+  const [render, setRender] = useState(false);
+  const isMounted = useIsMounted();
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (isMounted()) {
+        setRender(true);
+      }
+    }, 200);
+  }, []);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -83,6 +96,8 @@ export function AdminPanel() {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
+        {activeMenu === BarberShops.barbershops && render && <AddBarberShops />}
+        {activeMenu === BarberShops.services && render && <AddServices />}
       </Box>
     </Box>
   );
